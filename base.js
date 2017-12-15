@@ -1,39 +1,38 @@
-const GameObject=[];    //存储
-const GameId=[];              //
+const GameObject=[];    			
+const GameId=[];              
 var canBuffer;
 var canvas;
 var bitPol=[];
-function Canvas2DContext(canvas) {
+function Mcan(canvas) {
   if (typeof canvas === 'string') {
     canvas = document.getElementById(canvas);
   }
-  if (!(this instanceof Canvas2DContext)) {
-    return new Canvas2DContext(canvas);
+  if (!(this instanceof Mcan)) {
+    return new Mcan(canvas);
   }
   this.ele=canvas;
   this.init();
   this.context = this.ctx = canvas.getContext('2d');
-  if (!Canvas2DContext.prototype.arc) {
-    Canvas2DContext.setup.call(this, this.ctx);
+  if (!Mcan.prototype.arc) {
+    Mcan.setup.call(this, this.ctx);
   }
 }
-Canvas2DContext.prototype.init=function(){
+Mcan.prototype.init=function(){
 	canvas=this.ele;
 }
-Canvas2DContext.prototype.addId = function(id) {
+Mcan.prototype.addId = function(id) {
   this.id=id;
   GameId.push(id);
   GameObject[this.id]=[];
   return this;
 };
-Canvas2DContext.setup = function() {
+Mcan.setup = function() {
   var methods = ['arc', 'arcTo', 'beginPath', 'bezierCurveTo', 'clearRect', 'clip',
     'closePath', 'drawImage', 'fill', 'fillRect', 'fillText', 'lineTo', 'moveTo',
     'quadraticCurveTo', 'rect', 'restore', 'rotate', 'save', 'scale', 'setTransform',
     'stroke', 'strokeRect', 'strokeText', 'transform', 'translate'];
 
-  var getterMethods = ['createPattern', 'drawFocusRing', 'isPointInPath', 'measureText', // drawFocusRing not currently supported
-    // The following might instead be wrapped to be able to chain their child objects
+  var getterMethods = ['createPattern', 'drawFocusRing', 'isPointInPath', 'measureText', 
     'createImageData', 'createLinearGradient',
     'createRadialGradient', 'getImageData', 'putImageData'
   ];
@@ -44,7 +43,7 @@ Canvas2DContext.setup = function() {
 
   for (let m of methods) {
     let method = m;
-    Canvas2DContext.prototype[method] = function() {
+    Mcan.prototype[method] = function() {
       this.ctx[method].apply(this.ctx, arguments);
       if(this.id!='undefined'&& arguments!='undefined'){
         GameObject[this.id].push(method);
@@ -57,7 +56,7 @@ Canvas2DContext.setup = function() {
 
   for (let m of getterMethods) {
     let method = m;
-    Canvas2DContext.prototype[method] = function() {
+    Mcan.prototype[method] = function() {
       if(this.id!='undefined'&&arguments!='undefined'){
         GameObject[this.id].push(method);
         GameObject[this.id][method]={'type':"arg",'value':arguments};
@@ -68,7 +67,7 @@ Canvas2DContext.setup = function() {
 
   for (let p of props) {
     let prop = p;
-    Canvas2DContext.prototype[prop] = function(value) {
+    Mcan.prototype[prop] = function(value) {
       if (value === undefined)
         return this.ctx[prop];
       this.ctx[prop] = value;
@@ -83,7 +82,7 @@ Canvas2DContext.setup = function() {
 
 
 //画布重绘
-Canvas2DContext.prototype.rest=function(){
+Mcan.prototype.rest=function(){
 	//画布clear
 	this.ctx.clearRect(0,0,this.ele.width,this.ele.height);
 	//遍历行为数据，执行链式命令
@@ -93,18 +92,18 @@ Canvas2DContext.prototype.rest=function(){
       switch(GameObject[id][fun].type){
       	//根据类型会知道缓冲画布上
           case 'arg'://this.ctx[fun].apply(this.ctx,GameObject[id][fun].value);
-          						Canvas2DContext(canBuffer).ctx[fun].apply(Canvas2DContext(canBuffer).ctx,GameObject[id][fun].value);	
+          						Mcan(canBuffer).ctx[fun].apply(Mcan(canBuffer).ctx,GameObject[id][fun].value);	
           						break;
           case'value'://this.ctx[fun]=GameObject[id][fun].value;
-          						Canvas2DContext(canBuffer).ctx[fun]=GameObject[id][fun].value;
+          						Mcan(canBuffer).ctx[fun]=GameObject[id][fun].value;
           						break;
        }
     }
-    getBit(Canvas2DContext(canBuffer).ctx,Canvas2DContext(canBuffer).ele,id);
+    getBit(Mcan(canBuffer).ctx,Mcan(canBuffer).ele,id);
     //将数据绘制到主画布
     this.ctx.drawImage(canBuffer,0,0,canBuffer.width,canBuffer.height);
     //清空缓冲画布
-    Canvas2DContext(canBuffer).ctx.clearRect(0,0,canBuffer.width,canBuffer.height);
+    Mcan(canBuffer).ctx.clearRect(0,0,canBuffer.width,canBuffer.height);
   }
 }
 //用于创建离屏画布,以及对与start,update等函数的回调执行
@@ -116,7 +115,7 @@ window.onload=function(){
 		start();
 	}
 	if(typeof canvas=='object'){
-		Canvas2DContext(canvas).rest();
+		Mcan(canvas).rest();
 	}
 })();
 }
