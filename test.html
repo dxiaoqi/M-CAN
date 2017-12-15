@@ -12,27 +12,16 @@
 var canvas = document.getElementById('canvas');
 canvas.width=1000;
 canvas.height=600;
-
-// Use context to get access to underlying context
-//var ctx = Canvas2DContext(canvas)
-  //.strokeStyle('argb(30, 110, 210,0.5)')
-  //.strokeRect(2, 10, 15, 20);
-
- //Use property name as a function (but without arguments) to get the value
- //Canvas2DContext(canvas).addId('id').fillRect(0,0,200,100);
 function start(){
-	Canvas2DContext(canvas).addId('arc').strokeRect(10,0,200,200);
- 	//Canvas2DContext(canvas).clearRect(0,0,100,100);
- 	var ctx=canvas.getContext('2d');
- 	//ctx.clearRect(0,0,200,200);
- 	//Canvas2DContext(canvas).addId('abc').strokeRect(100,0,200,200);
- 	//Canvas2DContext(canvas).rest();
-	//Canvas2DContext(canvas).rest();
+	//初始化，可用于渲染静态
+	Mcan(canvas).addId('arc').strokeRect(10,0,200,200);
+ 	//Mcan(canvas).clearRect(0,0,100,100)；
+ 	//Mcan(canvas).addId('abc').strokeRect(100,0,200,200);
+ 	//Mcan(canvas).rest();
 }
 function updata(){
-	//Canvas2DContext(canvas).addId('arc').strokeRect(10,0,200,200).translate(10,10);
-	//Canvas2DContext(canvas).rest();
-	//console.log(1);
+	//渲染机制，可用于实现动画
+	//Mcan(canvas).addId('arc').strokeRect(10,0,200,200).translate(10,10);
 }
 
 </script>
