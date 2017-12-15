@@ -5,13 +5,13 @@
 # 例子:
 ```javascript
 var canvas = document.getElementById('canvas');
-C(canvas).addId('arc').strokeRect(10,0,200,200);
+Mcan(canvas).addId('arc').strokeRect(10,0,200,200);
 ```
 对canvas进行快速重绘
 ------- 
 # 例子
 ```javascript
-C(canvas).rest();
+Mcan(canvas).rest();
 ```
 绑定canvas上下文绘制的api
 ------- 
